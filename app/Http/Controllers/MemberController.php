@@ -46,6 +46,15 @@ class MemberController extends Controller
         return response()->json([
             "data"=> $Member
         ]);
+
+        $input = $request->all();
+        $input['password'] = bcrypt($request->password);
+        unset($input['konfirmasi_password']);
+        $Member = Member::create($input);
+
+        return response()->json([
+            "data"=> $Member
+        ]);
     }
        
 
@@ -54,8 +63,11 @@ class MemberController extends Controller
      */
     public function show(Member $Member)
     {
-        //
+        return response ()->json([
+            'data' =>$Member
+        ]);
     }
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -68,7 +80,9 @@ class MemberController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
     public function update(Request $request, Member $Member)
+
     {
         $Member->update($request->all());
 
@@ -82,7 +96,9 @@ class MemberController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
     public function destroy(Member $Member)
+
     {
         $Member->delete();
 
@@ -90,4 +106,5 @@ class MemberController extends Controller
             'message' => 'success'
         ]);
     }
+
 }
