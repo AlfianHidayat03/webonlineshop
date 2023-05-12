@@ -19,3 +19,5 @@ Route::get('/', function () {
 });
 Route::post('login',[AuthController::class, 'login_member']);
 Route::post('logout',[AuthController::class, 'logout_member']);
+
+Route::get('login',[AuthController::class, 'index']);
