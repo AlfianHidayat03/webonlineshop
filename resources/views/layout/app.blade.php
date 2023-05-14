@@ -47,6 +47,25 @@
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
+            
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Data Master</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="/kategori">Data Kategori</a>
+                        <a class="collapse-item" href="/subkategori">Data Subkategori</a>
+                        <a class="collapse-item" href="/slider">Data Slider</a>
+                        <a class="collapse-item" href="/barang">Data Barang</a>
+                        <a class="collapse-item" href="/member">Data Member</a>
+                        <a class="collapse-item" href="/testimoni">Data Testimoni</a>
+                        <a class="collapse-item" href="/reviews">Data Review</a>
+                    </div>
+                </div>
+            </li>
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pesanan"
@@ -126,6 +145,8 @@
                     <!-- Page Heading -->
                     <h1 class="h3 mb-4 text-gray-800">@yield('title')</h1>
 
+                    @yield('content')
+
                 </div>
                 <!-- /.container-fluid -->
 
@@ -162,6 +183,8 @@
 
     <!-- Custom scripts for all pages-->
     <script src="/sbadmin2/js/sb-admin-2.min.js"></script>
+
+    @stack('js')
 
 </body>
 
