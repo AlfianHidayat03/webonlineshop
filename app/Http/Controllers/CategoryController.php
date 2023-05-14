@@ -7,16 +7,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
-
+ 
 
 class CategoryController extends Controller
 {
 
 
-    public function construct()
+    public function __construct()
     {
-        $this->middleware('auth:api')->except(['index']);
+        $this->middleware('auth')->only(['list']);
+        $this->middleware('auth:api')->only(['store','update','delete']);
     }
+
+    public function list()
+        {
+            return view('kategori.index');
+        }
+    
 
     public function index()
     {
@@ -41,9 +48,32 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $category = Category::create($request->all());
+        $validator = Validator::make($request->all(),[
+            'nama_kategori' =>'required',
+            'deskripsi' =>'required',
+            'gambar' => 'required|image|mimes:jpg,png,jpeg,webp'
+        ]);
+
+        if ($validator->falls()) {
+            return response()->json(
+                $validator->errors(),
+                422
+            );
+        }
+
+        $input = $request->all();
+
+        if ($request->has('gambar')) {
+            $gambar = $request->file('gamnbar');
+            $nama_gambar = time() . rand(1, 9) . '.' . $gambar->getClientOriginalExtension();
+            $gambar->move('uploads', $nama_gambar);
+            $input['gambar'] = $nama_gambar;
+        }
+
+        $category = Category::create($input);
 
         return response()->json([
+            "success" => true,
             "data"=> $category
         ]);
     }
@@ -72,10 +102,35 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $category->update($request->all());
+        $validator = Validator::make($request->all(),[
+            'nama_kategori' =>'required',
+            'deskripsi' =>'required',
+        ]);
+
+        if ($validator->falls()) {
+            return response()->json(
+                $validator->errors(),
+                422
+            );
+        }
+
+        $input = $request->all();
+
+        if ($request->has('gambar')) {
+            File::delete('uploads/' . $category->gambar);
+            $gambar = $request->file('gamnbar');
+            $nama_gambar = time() . rand(1, 9) . '.' . $gambar->getClientOriginalExtension();
+            $gambar->move('uploads', $nama_gambar);
+            $input['gambar'] = $nama_gambar;
+        }else{
+            unset($input['gambar']);
+        }
+
+        $category->update($input);
 
 
         return response()->json([
+            'success' => true,
             'message' => 'success',
             'data' => $category
         ]);
@@ -86,9 +141,11 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        File::delete('uploads/' . $category->gambar);
         $category->delete();
 
         return response()->json([
+            'success' => true,
             'message' => 'success'
         ]);
     }
