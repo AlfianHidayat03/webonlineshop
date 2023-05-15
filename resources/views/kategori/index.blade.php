@@ -129,7 +129,7 @@
             $('input[name="nama_kategori"]').val('');
             $('textarea[name="deskripsi"]').val('');
 
-            $('.form-kategori').submit(function(e) {
+            $('.form-kategori').submit(function() {
                 e.preventDefault();
                 const token = localStorage.getItem('token');
                 const frmdata = new FormData(this);
