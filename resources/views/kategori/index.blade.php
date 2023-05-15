@@ -125,34 +125,35 @@
             });
 
             $('.modal-tambah').click(function(){
-                $('#modal-form').modal('show')
-                $('input[name="nama_kategori"]').val('')
-                $('textarea[name="deskripsi"]').val('')
+            $('#modal-form').modal('show');
+            $('input[name="nama_kategori"]').val('');
+            $('textarea[name="deskripsi"]').val('');
 
-                $('.form-kategori').submit(function() {
-                    e.preventDefault()
-                    const token = localStorage.getItem('token')
-                    const frmdata=new FormData($this)
+            $('.form-kategori').submit(function(e) {
+                e.preventDefault();
+                const token = localStorage.getItem('token');
+                const frmdata = new FormData(this);
 
-                    $.ajax({
-                        url : 'api/categories',
-                        type : 'POST',
-                        data : frmdata,
-                        cache : false,
-                        contentType : false,
-                        processData : false,
-                        headers : {
-                            "Authorization": token
-                        },
-                        success : function(data){
-                            if (data.success){
-                                alert('Data berhasil ditambah')
-                                location.reload();
-                            }
+                $.ajax({
+                    url: 'api/categories',
+                    type: 'POST',
+                    data: frmdata,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    headers: {
+                        "Authorization": $token
+                    },
+                    success: function(data){
+                        if (data.success){
+                            alert('Data berhasil ditambah');
+                            location.reload();
                         }
-                    })
+                    }
                 });
             });
+        });
+
 
             $(document).on('click','.modal-ubah',function(){
                 $('#modal-form').modal('show')
