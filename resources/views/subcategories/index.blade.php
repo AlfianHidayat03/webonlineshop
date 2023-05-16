@@ -42,7 +42,7 @@
                                     </td>
                                     <td class="text-center">
                                         <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('subcategories.destroy', $subcategory->id) }}" method="POST">
-                                            <a href="{{ route('subcategories.show', $subcategory->id) }}" class="btn btn-sm btn-warning">SHOW</a>
+                                            <a href="{{ route('subcategories.show', $subcategory->id) }}" class="btn btn-sm btn-">SHOW</a>
                                             <a href="{{ route('subcategories.edit', $subcategory->id) }}" class="btn btn-sm btn-primary">EDIT</a>
                                             @csrf
                                             @method('DELETE')
@@ -60,10 +60,7 @@
                           {{ $subcategories->links() }}
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    
+          
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
