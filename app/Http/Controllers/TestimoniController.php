@@ -2,94 +2,173 @@
 
 namespace App\Http\Controllers;
 
+//import Model testimoni
 use App\Models\Testimoni;
+
+//return type View
+use Illuminate\View\View;
+
+//return type redirectResponse
+use Illuminate\Http\RedirectResponse;
+
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
 
-
+use Illuminate\Support\Facades\Storage;
 
 class TestimoniController extends Controller
 {
-
-
-    public function construct()
+    /**
+     * index
+     *
+     * @return View
+     */
+    public function index(): View
     {
-        $this->middleware('auth:api')->except(['index']);
+        //get Testimonis
+        $testimonis = Testimoni::latest()->paginate(5);
+
+        //render view with testimonis
+        return view('testimonis.index', compact('testimonis'));
     }
 
-    public function index()
+     /**
+     * create
+     *
+     * @return View
+     */
+    public function create(): View
     {
-        $testimonis = Testimoni::all();
+        return view('testimonis.create');
+    }
 
-        return response()->json([
-
-            'data' =>$testimonis
+    /**
+     * store
+     *
+     * @param  mixed $request
+     * @return RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        //validate form
+        $this->validate($request, [
+            'nama_testimoni' => 'required',
+            'deskripsi' => 'required',
+            'gambar'    => 'required|image|mimes:jpeg,jpg,png|max:2048',
         ]);
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        //upload gambar
+        $image = $request->file('gambar');
+        $image->storeAs('public/testimonis', $image->hashName());
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $Testimoni = Testimoni::create($request->all());
-
-        return response()->json([
-            "data"=> $Testimoni
+        //create testimoni
+       Testimoni::create([
+            'nama_testimoni'     => $request->nama_testimoni,
+            'deskripsi'   => $request->deskripsi,
+            'gambar'     => $image->hashName()
         ]);
-    }
-       
 
-    /**
-     * Display the specified resource.
+        //redirect to index
+        return redirect()->route('testimonis.index')->with(['success' => 'Data Berhasil Disimpan!']);
+    }
+
+     /**
+     * show
+     *
+     * @param  mixed $id
+     * @return View
      */
-    public function show(Testimoni $Testimoni)
+    public function show(string $id): View
     {
-        return response ()->json([
-            'data' =>$Testimoni
+        //get testimoni by ID
+        $testimoni =Testimoni::findOrFail($id);
+
+        //render view with testimoni
+        return view('testimonis.show', compact('testimoni'));
+    }
+
+      /**
+     * edit
+     *
+     * @param  mixed $id
+     * @return View
+     */
+    public function edit(string $id): View
+    {
+        //get testimoni by ID
+        $testimoni =Testimoni::findOrFail($id);
+
+        //render view with testimoni
+        return view('testimonis.edit', compact('testimoni'));
+    }
+    
+      /**
+     * update
+     *
+     * @param  mixed $request
+     * @param  mixed $id
+     * @return RedirectResponse
+     */
+    public function update(Request $request, $id): RedirectResponse
+    {
+        //validate form
+        $this->validate($request, [
+            'nama_testimoni' => 'required',
+            'deskripsi' => 'required',
+            'gambar'    => 'required|image|mimes:jpeg,jpg,png|max:2048',
         ]);
+
+        //get testimoni by ID
+        $testimoni =Testimoni::findOrFail($id);
+
+        //check if image is uploaded
+        if ($request->hasFile('gambar')) {
+
+            //upload new image
+            $image = $request->file('gambar');
+            $image->storeAs('public/testimonis', $image->hashName());
+
+            //delete old image
+            Storage::delete('public/testimonis/'.$testimoni->gambar);
+
+            //update post with new image
+            $testimoni->update([
+                'nama_testimoni'     => $request->nama_testimoni,
+                'deskripsi'   => $request->deskripsi,
+                'gambar'     => $image->hashName()
+            ]);
+
+            
+        } else {
+
+            //update post without image
+            $testimoni->update([
+                'nama_testimoni'     => $request->nama_testimoni,
+                'deskripsi'   => $request->deskripsi
+            ]);
+        }
+
+        //redirect to index
+        return redirect()->route('testimonis.index')->with(['success' => 'Data Berhasil Diubah!']);
     }
 
-    /**
-     * Show the form for editing the specified resource.
+      /**
+     * destroy
+     *
+     * @param  mixed $testimoni
+     * @return void
      */
-    public function edit(Testimoni $Testimoni)
+    public function destroy($id): RedirectResponse
     {
-        //
-    }
+        //get testimoni by ID
+        $testimoni =Testimoni::findOrFail($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Testimoni $Testimoni)
-    {
-        $Testimoni->update($request->all());
+        //delete image
+        Storage::delete('public/testimonis/'. $testimoni->gambar);
 
+        //delete testimoni
+        $testimoni->delete();
 
-        return response()->json([
-            'message' => 'success',
-            'data' => $Testimoni
-        ]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Testimoni $Testimoni)
-    {
-        $Testimoni->delete();
-
-        return response()->json([
-            'message' => 'success'
-        ]);
+        //redirect to index
+        return redirect()->route('testimonis.index')->with(['success' => 'Data Berhasil Dihapus!']);
     }
 }

@@ -8,5 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Testimoni extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+    protected $fillable = [
+        'nama_testimoni',
+        'deskripsi',
+        'gambar',
+    ];
 }
