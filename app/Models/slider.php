@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class slider extends Model
 {
-    use HasFactory; 
-    protected $guarded = [];
+    use HasFactory;
+    protected $fillable = [
+        'id_slider',
+        'nama_slider',
+        'deskripsi',
+        'gambar',
+    ];
 }
