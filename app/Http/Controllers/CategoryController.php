@@ -2,151 +2,177 @@
 
 namespace App\Http\Controllers;
 
+//import Model "Category
 use App\Models\Category;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
 
- 
+//return type View
+use Illuminate\View\View;
+
+//return type redirectResponse
+use Illuminate\Http\RedirectResponse;
+
+use Illuminate\Http\Request;
+
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
-
-
-    public function __construct()
+    /**
+     * index
+     *
+     * @return View
+     */
+    public function index(): View
     {
-        $this->middleware('auth')->only(['list']);
-        $this->middleware('auth:api')->only(['store','update','delete']);
+        //get categories
+        $categories = Category::latest()->paginate(5);
+
+        //render view with categories
+        return view('categories.index', compact('categories'));
     }
 
-    public function list()
-        {
-            return view('kategori.index');
-        }
+     /**
+     * create
+     *
+     * @return View
+     */
+    public function create(): View
+    {
+        return view('categories.create');
+    }
+
+    /**
+     * store
+     *
+     * @param  mixed $request
+     * @return RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        //validate form
+        $this->validate($request, [
+            'id_kategori' => 'required',
+            'nama_kategori' => 'required',
+            'deskripsi' => 'required',
+            'gambar'    => 'required|image|mimes:jpeg,jpg,png|max:2048',
+        ]);
+
+        //upload gambar
+        $image = $request->file('gambar');
+        $image->storeAs('public/categories', $image->hashName());
+
+        //create category
+        Category::create([
+            'id_kategori'   => $request->id_kategori,
+            'nama_kategori'     => $request->nama_kategori,
+            'deskripsi'   => $request->deskripsi,
+            'gambar'     => $image->hashName()
+        ]);
+
+        //redirect to index
+        return redirect()->route('categories.index')->with(['success' => 'Data Berhasil Disimpan!']);
+    }
+
+     /**
+     * show
+     *
+     * @param  mixed $id
+     * @return View
+     */
+    public function show(string $id): View
+    {
+        //get category by ID
+        $category = Category::findOrFail($id);
+
+        //render view with category
+        return view('categories.show', compact('category'));
+    }
+
+      /**
+     * edit
+     *
+     * @param  mixed $id
+     * @return View
+     */
+    public function edit(string $id): View
+    {
+        //get category by ID
+        $category = Category::findOrFail($id);
+
+        //render view with category
+        return view('categories.edit', compact('category'));
+    }
     
-
-    public function index()
-    {
-        $categories = Category::all();
-
-        return response()->json([
-
-            'data' =>$categories
-        ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
+      /**
+     * update
+     *
+     * @param  mixed $request
+     * @param  mixed $id
+     * @return RedirectResponse
      */
-    public function create()
+    public function update(Request $request, $id): RedirectResponse
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(),[
-            'nama_kategori' =>'required',
-            'deskripsi' =>'required',
-            'gambar' => 'required|image|mimes:jpg,png,jpeg,webp'
+        //validate form
+        $this->validate($request, [
+            'id_kategori' => 'required',
+            'nama_kategori' => 'required',
+            'deskripsi' => 'required',
+            'gambar'    => 'required|image|mimes:jpeg,jpg,png|max:2048',
         ]);
 
-        if ($validator->falls()) {
-            return response()->json(
-                $validator->errors(),
-                422
-            );
+        //get category by ID
+        $category = Category::findOrFail($id);
+
+        //check if image is uploaded
+        if ($request->hasFile('gambar')) {
+
+            //upload new image
+            $image = $request->file('gambar');
+            $image->storeAs('public/categories', $image->hashName());
+
+            //delete old image
+            Storage::delete('public/categories/'.$category->gambar);
+
+            //update post with new image
+            $category->update([
+                'id_kategori'   => $request->id_kategori,
+                'nama_kategori'     => $request->nama_kategori,
+                'deskripsi'   => $request->deskripsi,
+                'gambar'     => $image->hashName()
+            ]);
+
+            
+        } else {
+
+            //update post without image
+            $category->update([
+                'nama_kategori'     => $request->nama_kategori,
+                'deskripsi'   => $request->deskripsi
+            ]);
         }
 
-        $input = $request->all();
-
-        if ($request->has('gambar')) {
-            $gambar = $request->file('gamnbar');
-            $nama_gambar = time() . rand(1, 9) . '.' . $gambar->getClientOriginalExtension();
-            $gambar->move('uploads', $nama_gambar);
-            $input['gambar'] = $nama_gambar;
-        }
-
-        $category = Category::create($input);
-
-        return response()->json([
-            "success" => true,
-            "data"=> $category
-        ]);
-    }
-       
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Category $category)
-    {
-        return response ()->json([
-            'data' =>$category
-        ]);
+        //redirect to index
+        return redirect()->route('categories.index')->with(['success' => 'Data Berhasil Diubah!']);
     }
 
-    /**
-     * Show the form for editing the specified resource.
+      /**
+     * destroy
+     *
+     * @param  mixed $category
+     * @return void
      */
-    public function edit(Category $category)
+    public function destroy($id): RedirectResponse
     {
-        //
-    }
+        //get category by ID
+        $category = Category::findOrFail($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Category $category)
-    {
-        $validator = Validator::make($request->all(),[
-            'nama_kategori' =>'required',
-            'deskripsi' =>'required',
-        ]);
+        //delete image
+        Storage::delete('public/categories/'. $category->gambar);
 
-        if ($validator->falls()) {
-            return response()->json(
-                $validator->errors(),
-                422
-            );
-        }
-
-        $input = $request->all();
-
-        if ($request->has('gambar')) {
-            File::delete('uploads/' . $category->gambar);
-            $gambar = $request->file('gamnbar');
-            $nama_gambar = time() . rand(1, 9) . '.' . $gambar->getClientOriginalExtension();
-            $gambar->move('uploads', $nama_gambar);
-            $input['gambar'] = $nama_gambar;
-        }else{
-            unset($input['gambar']);
-        }
-
-        $category->update($input);
-
-
-        return response()->json([
-            'success' => true,
-            'message' => 'success',
-            'data' => $category
-        ]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Category $category)
-    {
-        File::delete('uploads/' . $category->gambar);
+        //delete category
         $category->delete();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'success'
-        ]);
+        //redirect to index
+        return redirect()->route('categories.index')->with(['success' => 'Data Berhasil Dihapus!']);
     }
 }
