@@ -59,10 +59,8 @@
                         <a class="collapse-item" href="/categories">Data Kategori</a>
                         <a class="collapse-item" href="/subcategories">Data Subkategori</a>
                         <a class="collapse-item" href="/sliders">Data Slider</a>
-                        <a class="collapse-item" href="/barang">Data Barang</a>
-                        <a class="collapse-item" href="/member">Data Member</a>
-                        <a class="collapse-item" href="/testimoni">Data Testimoni</a>
-                        <a class="collapse-item" href="/reviews">Data Review</a>
+                        <a class="collapse-item" href="/products">Data Barang</a>
+                        <a class="collapse-item" href="/testimonis">Data Testimoni</a>
                     </div>
                 </div>
             </li>
