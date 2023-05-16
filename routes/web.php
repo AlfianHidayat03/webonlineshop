@@ -29,6 +29,9 @@ Route::get('/logout',[AuthController::class, 'logout']);
 //data master
 Route::resource('/categories', \App\Http\Controllers\CategoryController::class);
 Route::resource('/subcategories', \App\Http\Controllers\SubcategoryController::class);
+Route::resource('/sliders', \App\Http\Controllers\SliderController::class);
+Route::resource('/products', \App\Http\Controllers\ProductController::class);
+Route::resource('/testimonis', \App\Http\Controllers\TestimoniController::class);
 
 //dashboard
 Route::get('/dashboard',[DashboardController::class, 'index']);
