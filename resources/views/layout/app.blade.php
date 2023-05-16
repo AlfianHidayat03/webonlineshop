@@ -56,7 +56,7 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="/kategori">Data Kategori</a>
+                        <a class="collapse-item" href="/categories">Data Kategori</a>
                         <a class="collapse-item" href="/subkategori">Data Subkategori</a>
                         <a class="collapse-item" href="/slider">Data Slider</a>
                         <a class="collapse-item" href="/barang">Data Barang</a>
@@ -184,7 +184,6 @@
     <!-- Custom scripts for all pages-->
     <script src="/sbadmin2/js/sb-admin-2.min.js"></script>
 
-    @stack('js')
 
 </body>
 
