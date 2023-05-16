@@ -27,7 +27,7 @@ Route::get('/logout',[AuthController::class, 'logout']);
 
 
 //kategori
-Route::get('/kategori',[CategoryController::class, 'list']);
+Route::resource('/categories', \App\Http\Controllers\CategoryController::class);
 
 //dashboard
 Route::get('/dashboard',[DashboardController::class, 'index']);
