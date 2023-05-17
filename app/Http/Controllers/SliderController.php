@@ -2,94 +2,177 @@
 
 namespace App\Http\Controllers;
 
+//import Model "Slider
 use App\Models\Slider;
+
+//return type View
+use Illuminate\View\View;
+
+//return type redirectResponse
+use Illuminate\Http\RedirectResponse;
+
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
 
-
+use Illuminate\Support\Facades\Storage;
 
 class SliderController extends Controller
 {
-
-
-    public function construct()
+    /**
+     * index
+     *
+     * @return View
+     */
+    public function index(): View
     {
-        $this->middleware('auth:api')->except(['index']);
+        //get sliders
+        $sliders = Slider::latest()->paginate(5);
+
+        //render view with sliders
+        return view('sliders.index', compact('sliders'));
     }
 
-    public function index()
+     /**
+     * create
+     *
+     * @return View
+     */
+    public function create(): View
     {
-        $sliders = Slider::all();
+        return view('sliders.create');
+    }
 
-        return response()->json([
-
-            'data' =>$sliders
+    /**
+     * store
+     *
+     * @param  mixed $request
+     * @return RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        //validate form
+        $this->validate($request, [
+            'id_slider' => 'required',
+            'nama_slider' => 'required',
+            'deskripsi' => 'required',
+            'gambar'    => 'required|image|mimes:jpeg,jpg,png|max:2048',
         ]);
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        //upload gambar
+        $image = $request->file('gambar');
+        $image->storeAs('public/sliders', $image->hashName());
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $Slider = Slider::create($request->all());
-
-        return response()->json([
-            "data"=> $Slider
+        //create Slider
+        Slider::create([
+            'id_slider'   => $request->id_slider,
+            'nama_slider'     => $request->nama_slider,
+            'deskripsi'   => $request->deskripsi,
+            'gambar'     => $image->hashName()
         ]);
-    }
-       
 
-    /**
-     * Display the specified resource.
+        //redirect to index
+        return redirect()->route('sliders.index')->with(['success' => 'Data Berhasil Disimpan!']);
+    }
+
+     /**
+     * show
+     *
+     * @param  mixed $id
+     * @return View
      */
-    public function show(Slider $Slider)
+    public function show(string $id): View
     {
-        return response ()->json([
-            'data' =>$Slider
+        //get Slider by ID
+        $slider = Slider::findOrFail($id);
+
+        //render view with Slider
+        return view('sliders.show', compact('slider'));
+    }
+
+      /**
+     * edit
+     *
+     * @param  mixed $id
+     * @return View
+     */
+    public function edit(string $id): View
+    {
+        //get Slider by ID
+        $slider = Slider::findOrFail($id);
+
+        //render view with Slider
+        return view('sliders.edit', compact('slider'));
+    }
+    
+      /**
+     * update
+     *
+     * @param  mixed $request
+     * @param  mixed $id
+     * @return RedirectResponse
+     */
+    public function update(Request $request, $id): RedirectResponse
+    {
+        //validate form
+        $this->validate($request, [
+            'id_slider' => 'required',
+            'nama_slider' => 'required',
+            'deskripsi' => 'required',
+            'gambar'    => 'required|image|mimes:jpeg,jpg,png|max:2048',
         ]);
+
+        //get Slider by ID
+        $slider = Slider::findOrFail($id);
+
+        //check if image is uploaded
+        if ($request->hasFile('gambar')) {
+
+            //upload new image
+            $image = $request->file('gambar');
+            $image->storeAs('public/sliders', $image->hashName());
+
+            //delete old image
+            Storage::delete('public/sliders/'.$slider->gambar);
+
+            //update post with new image
+            $slider->update([
+                'id_slider'   => $request->id_slider,
+                'nama_slider'     => $request->nama_slider,
+                'deskripsi'   => $request->deskripsi,
+                'gambar'     => $image->hashName()
+            ]);
+
+            
+        } else {
+
+            //update post without image
+            $slider->update([
+                'nama_slider'     => $request->nama_slider,
+                'deskripsi'   => $request->deskripsi
+            ]);
+        }
+
+        //redirect to index
+        return redirect()->route('sliders.index')->with(['success' => 'Data Berhasil Diubah!']);
     }
 
-    /**
-     * Show the form for editing the specified resource.
+      /**
+     * destroy
+     *
+     * @param  mixed $slider
+     * @return void
      */
-    public function edit(Slider $Slider)
+    public function destroy($id): RedirectResponse
     {
-        //
-    }
+        //get Slider by ID
+        $slider = Slider::findOrFail($id);
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Slider $Slider)
-    {
-        $Slider->update($request->all());
+        //delete image
+        Storage::delete('public/sliders/'. $slider->gambar);
 
+        //delete Slider
+        $slider->delete();
 
-        return response()->json([
-            'message' => 'success',
-            'data' => $Slider
-        ]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Slider $Slider)
-    {
-        $Slider->delete();
-
-        return response()->json([
-            'message' => 'success'
-        ]);
+        //redirect to index
+        return redirect()->route('sliders.index')->with(['success' => 'Data Berhasil Dihapus!']);
     }
 }
