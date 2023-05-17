@@ -14,4 +14,14 @@ class Subcategory extends Model
         'deskripsi',
         'gambar',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'id_kategori', 'id');
+    }
+
+    public function product()
+    {
+        return $this->hasMany(Product::class);
+    }
 }
