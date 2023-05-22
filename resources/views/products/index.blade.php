@@ -7,6 +7,15 @@
     <title>Data Barang</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <style>
+        .css-serial {
+        counter-reset: serial-number;  /* Atur penomoran ke 0 */
+        }
+        .css-serial td:first-child:before {
+        counter-increment: serial-number;  /* Kenaikan penomoran */
+        content: counter(serial-number);  /* Tampilan counter */
+        }
+    </style>
 </head>
 <body style="background: lightgray">
 <div class="container mt-5">
@@ -19,9 +28,10 @@
                 <div class="card border-0 shadow-sm rounded">
                     <div class="card-body">
                         <a href="{{ route('products.create') }}" class="btn btn-md btn-primary mb-3">Tambah Data</a>
-                        <table class="table table-bordered table-hover table-striped" >
+                        <table class="table table-bordered table-hover table-striped css-serial" >
                             <thead>
                               <tr class="text-center">
+                                <th scope="col">No</th>
                                 <th scope="col">Id Kategori</th>
                                 <th scope="col">Id Subkategori</th>
                                 <th scope="col">Nama Barang</th>
@@ -29,7 +39,6 @@
                                 <th scope="col">Diskon</th>
                                 <th scope="col">Bahan</th>
                                 <th scope="col">Sku</th>
-                                <th scope="col">Tags</th>
                                 <th scope="col">Ukuran</th>
                                 <th scope="col">Warna</th>
                                 <th scope="col">Gambar</th>
@@ -38,7 +47,8 @@
                             </thead>
                             <tbody>
                               @forelse ($products as $product)
-                                <tr>    
+                                <tr>   
+                                    <td></td> 
                                     <td>{{ $product->id_kategori }}</td>
                                     <td>{{ $product->id_subkategori }}</td>
                                     <td>{{ $product->nama_barang }}</td>
@@ -46,7 +56,6 @@
                                     <td>{{ $product->diskon }}</td>
                                     <td>{{ $product->bahan }}</td>
                                     <td>{{ $product->sku }}</td>
-                                    <td>{{ $product->tags }}</td>
                                     <td>{{ $product->ukuran }}</td>
                                     <td>{{ $product->warna }}</td>
                                     <td class="text-center">

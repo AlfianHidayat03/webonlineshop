@@ -7,6 +7,15 @@
     <title>Data Kategori</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <style>
+        .css-serial {
+        counter-reset: serial-number;  /* Atur penomoran ke 0 */
+        }
+        .css-serial td:first-child:before {
+        counter-increment: serial-number;  /* Kenaikan penomoran */
+        content: counter(serial-number);  /* Tampilan counter */
+        }
+    </style>
 </head>
 <body style="background: lightgray">
 <div class="container mt-5">
@@ -19,7 +28,7 @@
                 <div class="card border-0 shadow-sm rounded">
                     <div class="card-body">
                         <a href="{{ route('categories.create') }}" class="btn btn-md btn-primary mb-3">Tambah Data</a>
-                        <table class="table table-bordered table-hover table-striped" >
+                        <table class="table table-bordered table-hover table-striped css-serial" >
                             <thead>
                               <tr class="text-center">
                                 <th scope="col">No</th>

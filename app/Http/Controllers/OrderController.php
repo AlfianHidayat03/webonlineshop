@@ -12,6 +12,11 @@ use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
+    public function __construct()
+    {
+
+        $this->middleware('auth:api')->only(['store','update','destroy','ubah_status','baru','dikonfirmasi','dikemas','dikirim','diterima','selesai']);
+    }
 
 
     public function construct()
@@ -21,7 +26,7 @@ class OrderController extends Controller
 
     public function index()
     {
-        $orders = Order::all();
+        $orders = Order::with('member')->get();
 
         return response()->json([
 
@@ -137,9 +142,19 @@ class OrderController extends Controller
         ]);
     }
 
+    public function baru()
+    {
+        $orders = Order::with('member')->where('status', 'Baru')->get();
+    
+        return response()->json([
+            'data' => $orders
+        ]);
+    }
+    
+
     public function dikonfirmasi()
 {
-    $orders = Order::where('status', 'Dikonfirmasi')->get();
+    $orders = Order::with('member')->where('status', 'Dikonfirmasi')->get();
 
     return response()->json([
         'data' => $orders
@@ -148,7 +163,7 @@ class OrderController extends Controller
 
 public function dikemas()
 {
-    $orders = Order::where('status', 'Dikemas')->get();
+    $orders = Order::with('member')->where('status', 'Dikemas')->get();
 
     return response()->json([
         'data' => $orders
@@ -157,7 +172,7 @@ public function dikemas()
 
 public function dikirim()
 {
-    $orders = Order::where('status', 'Dikirim')->get();
+    $orders = Order::with('member')->where('status', 'Dikirim')->get();
 
     return response()->json([
         'data' => $orders
@@ -166,7 +181,7 @@ public function dikirim()
 
 public function diterima()
 {
-    $orders = Order::where('status', 'Diterima')->get();
+    $orders = Order::with('member')->where('status', 'Diterima')->get();
 
     return response()->json([
         'data' => $orders
@@ -175,7 +190,7 @@ public function diterima()
 
 public function selesai()
 {
-    $orders = Order::where('status', 'Selesai')->get();
+    $orders = Order::with('member')->where('status', 'Selesai')->get();
 
     return response()->json([
         'data' => $orders

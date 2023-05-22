@@ -17,9 +17,7 @@
                         <img src="{{ asset('storage/categories/'.$category->gambar) }}" class="w-100 rounded">
                         <hr>
                         <h4>{{ $category->nama_kategori }}</h4>
-                        <p class="tmt-3">
-                            {!! $category->deskripsi !!}
-                        </p>
+                        <p class="tmt-3">{!! $category->deskripsi !!}</p>
                     </div>
                 </div>
             </div>
