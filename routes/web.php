@@ -33,6 +33,5 @@ Route::resource('/sliders', \App\Http\Controllers\SliderController::class);
 Route::resource('/products', \App\Http\Controllers\ProductController::class);
 Route::resource('/testimonis', \App\Http\Controllers\TestimoniController::class);
 
-Route::resource('/orders', \App\Http\Controllers\OrderController::class);
 //dashboard
 Route::get('/dashboard',[DashboardController::class, 'index']);

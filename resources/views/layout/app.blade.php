@@ -35,7 +35,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">NGONFIG</div>
+                <div class="sidebar-brand-text mx-3">AkuAdmin_</div>
             </a>
 
             <!-- Divider -->
@@ -65,28 +65,6 @@
                 </div>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pesanan"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-shopping-cart"></i>
-                    <span>Data Pesanan</span>
-                </a>
-                <div id="pesanan" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="/pesanan/baru">Pesanan Baru</a>
-                        <a class="collapse-item" href="/pesanan/dikonfirmasi">Pesanan Dikonfirmasi</a>
-                        <a class="collapse-item" href="/pesanan/dikemas">Pesanan Dikemas</a>
-                        <a class="collapse-item" href="/pesanan/dikirim">Pesanan Dikirim</a>
-                        <a class="collapse-item" href="/pesanan/diterima">Pesanan Diterima</a>
-                        <a class="collapse-item" href="/pesanan/selesai">Pesanan Selesai</a>
-                    </div>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/laporan">
-                    <i class="fas fa-fw fa-book"></i>
-                    <span>Laporan Pesanan</span></a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link" href="/logout">
                     <i class="fas fa-fw fa-sign-out-alt"></i>
@@ -155,7 +133,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; OnlineShop 2023</span>
+                        <span>Copyright &copy; Pendataan Gudang Toko 2023 </span>
                     </div>
                 </div>
             </footer>

@@ -36,14 +36,5 @@ Route::group([
       'reviews' => ReviewController::class,
       'orders' => OrderController::class,
    ]);
-    
-   Route::get('pesanan/baru',[OrderController::class, 'baru']);
-   Route::get('pesanan/dikonfirmasi',[OrderController::class, 'dikonfirmasi']);
-   Route::get('pesanan/dikemas',[OrderController::class, 'dikemas']);
-   Route::get('pesanan/dikirim',[OrderController::class, 'dikirim']);
-   Route::get('pesanan/diterima',[OrderController::class, 'diterima']);
-   Route::get('pesanan/selesai',[OrderController::class, 'selesai']);
 
-   Route::post('pesanan/ubah_status/{order}',[OrderController::class, 'ubah_status']);
-   Route::get('reports',[ReportController::class, 'get_reports']);
 });
