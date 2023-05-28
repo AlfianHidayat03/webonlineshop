@@ -11,10 +11,10 @@
         .css-serial {
         counter-reset: serial-number;  /* Atur penomoran ke 0 */
         }
-        .css-serial td:first-child:before {
-        counter-increment: serial-number;  /* Kenaikan penomoran */
-        content: counter(serial-number);  /* Tampilan counter */
-        }
+    .css-serial td:first-child:before {
+    counter-increment: serial-number;  /* Kenaikan penomoran */
+    content: counter(serial-number);  /* Tampilan counter */
+    }
     </style>
 </head>
 <body style="background: lightgray">
