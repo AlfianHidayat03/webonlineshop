@@ -7,11 +7,11 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-<h1>Nama : Alfian Hidayat (202169040007)</h1>
+<a>Nama : Alfian Hidayat (202169040007)</a>
 <br>
-<h1>Jurusan : Teknik Informatika</h1>
+<a>Jurusan : Teknik Informatika</a>
 <br>
-<h1>Semester/Kelas : 4A</h1>
+<a>Semester/Kelas : 4A</a>
 
 ## About Laravel
 
