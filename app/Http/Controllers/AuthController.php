@@ -44,45 +44,9 @@ class AuthController extends Controller
         ]);
     }
 
-    public function register(Request $request)
-    {
-        $Member = Member::create($request->all());
-
-        return response()->json([
-            "data"=> $Member
-        ]);
-
-        $input = $request->all();
-        $input['password'] = bcrypt($request->password);
-        unset($input['konfirmasi_password']);
-        $Member = Member::create($input);
-
-        return response()->json([
-            "data"=> $Member
-        ]);
-    }
-
-    public function login_member(Request $request)
-    {
-        $email = $request->email;
-        $password = $request->password;
-        $member = Member::where('email', $request->email)->first();
-
-        return response()->json([
-            "message"=> 'success',
-            'data'=> $member
-        ]);
-    } 
-
     public function logout()
     {
         Session::flush();
         return redirect('/login');
-    }
-
-    public function logout_member ()
-    {
-        Session::flush();
-        return redirect('/login_member');
     }
 }    
