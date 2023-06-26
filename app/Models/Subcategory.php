@@ -15,13 +15,5 @@ class Subcategory extends Model
         'gambar',
     ];
 
-    public function category()
-    {
-        return $this->belongsTo(Category::class, 'id_kategori', 'id');
-    }
-
-    public function product()
-    {
-        return $this->hasMany(Product::class);
-    }
+ 
 }

@@ -16,13 +16,4 @@ class Category extends Model
         'gambar',
     ];
 
-    public function Subcategory() : HasMany
-    {
-        return $this->hasMany(Subcategory::class);
-    }
-
-    public function Product() : HasMany
-    {
-        return $this->hasMany(Product::class);
-    }
 }

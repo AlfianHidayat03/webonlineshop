@@ -23,13 +23,5 @@ class Product extends Model
         'deskripsi',
         'gambar',
     ];
-    public function category() : BelongsTo
-    {
-        return $this->belongsTo(Category::class, 'id_kategori', 'id');
-    }
 
-    public function subcategory() : BelongsTo
-    {
-        return $this->belongsTo(Subcategory::class, 'id_subkategori', 'id');
-    }
 }
